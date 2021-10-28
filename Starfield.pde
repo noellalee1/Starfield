@@ -6,7 +6,7 @@ int pattern;
 
 void setup() {
   size (400, 400);
-  starling = new Starz[500];
+  starling = new Starz[700];
 
   for (int i = 0; i < starling.length; i++) {
     starling[i] = new Starz(200, 200, 0);
@@ -17,7 +17,7 @@ void setup() {
 
 void draw() {
   background (0);
-  pattern = (int)(Math.random()*3);
+  //pattern = (int)(Math.random()*3);
 
   if (mousePressed && mouseButton == LEFT) {
     for (int i = 0; i < starling.length; i++) {
@@ -25,14 +25,22 @@ void draw() {
     }
   }
 
-
-
   for (int i = 0; i < starling.length; i++) {
     starling [i].show();
     starling[i].move();
   }
-}
 
+  fill (255);
+  if (pattern == 0) {
+    text("Pattern: firework", 40, 360);
+  } else if (pattern == 1) {
+    text("Pattern: target", 40, 360);
+  } else if (pattern == 2) {
+    text("Pattern: grid", 40, 360);
+  } else if (pattern == 3) {
+    text("Pattern: ", 40, 360);
+  }
+}
 void mousePressed() {
   if (mouseButton == LEFT) {
     newX = mouseX;
@@ -44,8 +52,23 @@ void mousePressed() {
   }
 }
 
+float wheelCount = 0;
 
-void mouseWheel() {
+void mouseWheel(MouseEvent event) {
+
+  if (wheelCount < 12 && event.getCount()==1) {
+    wheelCount+= event.getCount();
+  } else if (wheelCount > 0 && event.getCount() == -1) {
+    wheelCount+= event.getCount();
+  } 
+  //println(wheelCount);
+
+  for (int i = 0; i < 3; i++) {
+    if (wheelCount/2 == i) {
+      pattern = i;
+      println(pattern);
+    }
+  }
 }
 
 
@@ -95,5 +118,10 @@ class Starz {
     noStroke();
     fill (myColor);
     ellipse ((float)myX, (float) myY, mySize, mySize);
+  }
+}
+
+class Oddity extends Starz {
+  Oddity (double x, double y, int chosenPattern) {
   }
 }
