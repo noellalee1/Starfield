@@ -15,6 +15,11 @@ int star3 = 0;
 
 int increasingSize =0;
 
+int helpButtonX =370;
+int helpButtonY=30;
+int helpButtonSize =20;
+boolean helpOver;
+
 void setup() {
   size (400, 400);
   starling = new Starz[700];
@@ -29,7 +34,30 @@ void setup() {
 
 void draw() {
   background (0);
-  //pattern = (int)(Math.random()*3);
+
+  update(mouseX, mouseY);
+  if (helpOver) {
+  }
+  fill (255, 0, 0);
+  ellipse (helpButtonX, helpButtonY, helpButtonSize, helpButtonSize);
+
+  if (leftClick == false) {
+    fill (255);
+    textSize (20);
+    text ("Welcome to Star Field!", 10, 30);
+    textSize(13);
+    text ("left click to move the starfield around", 40, 60);
+    text ("scroll to change the mode", 40, 80);
+
+    text ("there are currently six modes: ", 40, 120);
+    text ("firework, target, grid, star, increasing size, decreasing size ", 40, 140);
+    
+    text ("click to start", 40, 180);
+  }
+  fill (255);
+  text ("?", 367, 35);
+  
+  text ("right click", 340, 50);
 
   if (mousePressed && mouseButton == LEFT) {
     for (int i = 0; i < starling.length; i++) {
@@ -37,6 +65,8 @@ void draw() {
       starling[0] = new Oddity (newX, newY, pattern, increasingSize, sizePattern, patternUnderSizePattern);
     }
   }
+
+  
 
   for (int i = 0; i < starling.length; i++) {
     starling [i].show();
@@ -53,8 +83,8 @@ void draw() {
   } else if (pattern == 3) {
     text("Pattern: star", 40, 360);
   } else if (sizePattern == 4) {
-    text("Pattern: increasing size", 40, 360);
-    text ("increasing by: " + increasingSize, 40, 380);
+    text("Pattern: increasing size (right click to increase)", 40, 360);
+    text ("default size: 5     current size: " + (5+increasingSize), 40, 380);
     if (patternUnderSizePattern == 0) {
       text("Pattern: firework", 40, 340);
     } else if (patternUnderSizePattern == 1) {
@@ -65,14 +95,29 @@ void draw() {
       text("Pattern: star", 40, 340);
     }
   } else if (sizePattern == 5) {
-    text("Pattern: decreasing size", 40, 360);
-    text ("decreasing by: " + increasingSize, 40, 380);
+    text("Pattern: decreasing size (right click to decrease)", 40, 360);
+    text ("default size: 5     current size: " + (5+increasingSize), 40, 380);
+    if (patternUnderSizePattern == 0) {
+      text("Pattern: firework", 40, 340);
+    } else if (patternUnderSizePattern == 1) {
+      text("Pattern: target", 40, 340);
+    } else if (patternUnderSizePattern == 2) {
+      text("Pattern: grid", 40, 340);
+    } else if (patternUnderSizePattern == 3) {
+      text("Pattern: star", 40, 340);
+    }
   }
 }
 void mousePressed() {
+  
+  if (helpOver){
+    leftClick = false;
+  }
+  
   if (mouseButton == LEFT) {
     newX = mouseX;
     newY = mouseY;
+    leftClick = true;
     
   }
 
@@ -80,7 +125,11 @@ void mousePressed() {
     if (sizePattern == 4) {
       increasingSize++;
     } else if (sizePattern == 5) {
-      increasingSize--;
+      if (increasingSize > 0) {
+        increasingSize--;
+      } else {
+        increasingSize = 0;
+      }
     }
   }
 
@@ -105,12 +154,12 @@ void mouseWheel(MouseEvent event) {
     wheelCount+= event.getCount();
   }
   //println(wheelCount);
-  
+
   for (int i = 0; i < 6; i++) {
     if (wheelCount/2 == i) {
       pattern = i;
       sizePattern = i;
-      println(pattern);
+      //  println(pattern);
     }
   }
 }
@@ -125,7 +174,6 @@ class Starz {
   Starz(double x, double y, int chosenPattern, int newSize, int newSizePattern, int newPatternUnderSizePattern) {
     myColor = color((int)(Math.random()*235)+52, (int)(Math.random()*235)+52, (int)(Math.random()*235)+52);
     pattern = chosenPattern;
-    newPatternUnderSizePattern = newPatternUnderSizePattern;
     if (pattern == 0) { //normal
       myX = x;
       myY = y;
@@ -152,25 +200,25 @@ class Starz {
       mySize = 5 ;
     } else if (sizePattern == 4) {
 
-      if (newPatternUnderSizePattern ==3) {
+      if (patternUnderSizePattern ==3) {
         myX = x;
         myY = y;
         myAngle = (int)(Math.random()*(2*Math.PI));
         mySpeed = (Math.random()*10);
         mySize = 5+newSize;
-      } else if (newPatternUnderSizePattern ==2) {
+      } else if (patternUnderSizePattern ==2) {
         myX = x;
         myY = y;
         myAngle = (Math.random()*(2*Math.PI));
         mySpeed = (Math.random()*10);
         mySize = 5+newSize ;
-      } else if (newPatternUnderSizePattern ==1) {
+      } else if (patternUnderSizePattern ==1) {
         myX = x;
         myY = y;
         myAngle = (Math.random()*(2*Math.PI));
         mySpeed = (int)(Math.random()*10);
         mySize = 5+newSize ;
-      } else if (newPatternUnderSizePattern ==0) {
+      } else if (patternUnderSizePattern ==0) {
         myX = x;
         myY = y;
         myAngle = (Math.random()*(2*Math.PI));
@@ -178,25 +226,25 @@ class Starz {
         mySize = 5+newSize ;
       }
     } else if (sizePattern == 5) {
-      if (newPatternUnderSizePattern ==3) {
+      if (patternUnderSizePattern ==3) {
         myX = x;
         myY = y;
         myAngle = (int)(Math.random()*(2*Math.PI));
         mySpeed = (Math.random()*10);
         mySize = 5+newSize;
-      } else if (newPatternUnderSizePattern ==2) {
+      } else if (patternUnderSizePattern ==2) {
         myX = x;
         myY = y;
         myAngle = (Math.random()*(2*Math.PI));
         mySpeed = (Math.random()*10);
         mySize = 5+newSize ;
-      } else if (newPatternUnderSizePattern ==1) {
+      } else if (patternUnderSizePattern ==1) {
         myX = x;
         myY = y;
         myAngle = (Math.random()*(2*Math.PI));
         mySpeed = (int)(Math.random()*10);
         mySize = 5+newSize ;
-      } else if (newPatternUnderSizePattern ==0) {
+      } else if (patternUnderSizePattern ==0) {
         myX = x;
         myY = y;
         myAngle = (Math.random()*(2*Math.PI));
@@ -207,7 +255,10 @@ class Starz {
     }
   }
   void move() {
-    if (pattern == 2 || newPatternUnderSizePattern == 2) {
+    if (pattern == 2) {
+      myX = (int)(myX+Math.cos(myAngle)*mySpeed);
+      myY = (int)(myY+Math.sin(myAngle)*mySpeed);
+    } else if (patternUnderSizePattern == 2) {
       myX = (int)(myX+Math.cos(myAngle)*mySpeed);
       myY = (int)(myY+Math.sin(myAngle)*mySpeed);
     } else {
@@ -247,7 +298,7 @@ class Oddity extends Starz {
     myY = y;
     myAngle = (Math.random()*(2*Math.PI));
     mySpeed = (Math.random()*10);
-    mySize = 40+newSize;
+    mySize = 30+newSize;
   }
   void move() {
     //maybe make it "walk" or rotate
@@ -259,6 +310,25 @@ class Oddity extends Starz {
     myColor = color((int)(Math.random()*235)+52, (int)(Math.random()*235)+52, (int)(Math.random()*235)+52);
     fill (myColor);
     noStroke();
-    ellipse ((float)myX, (float)myY, 20, 20);
+    ellipse ((float)myX, (float)myY, mySize, mySize);
+  }
+}
+
+void update(int x, int y) {
+  if (overHelp(helpButtonX, helpButtonY, helpButtonSize))
+  {
+    helpOver = true;
+  } else {
+    helpOver = false;
+  }
+}
+
+boolean overHelp(int x, int y, int diameter) {
+  float disX = x - mouseX;
+  float disY = y - mouseY;
+  if (sqrt(sq(disX) + sq(disY)) < diameter/2 ) {
+    return true;
+  } else {
+    return false;
   }
 }
