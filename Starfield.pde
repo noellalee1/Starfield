@@ -146,6 +146,7 @@ void mousePressed() {
   }
 }
 float wheelCount = 0;
+/*
 void mouseWheel(MouseEvent event) {
 
   if (wheelCount < 12 && event.getCount()==1) {
@@ -163,7 +164,24 @@ void mouseWheel(MouseEvent event) {
     }
   }
 }
+*/
 
+void keyPressed(){ //double click W or S to change mode
+  if ((key == 'W' || key == 'w')&& wheelCount < 12){
+    wheelCount++;
+  } else if ((key =='S' || key == 's')&& wheelCount > 0){
+    wheelCount--;
+  }
+  
+    for (int i = 0; i < 6; i++) {
+    if (wheelCount/2 == i) {
+      pattern = i;
+      sizePattern = i;
+      //  println(pattern);
+    }
+    
+}
+}
 
 class Starz {
   double myX, myY, mySpeed, myAngle;
