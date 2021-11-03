@@ -177,7 +177,6 @@ class Starz {
   void show() {
 
     noStroke();
-    println (cClick);
 
     fill (myColor);
     ellipse ((float)myX, (float) myY, mySize, mySize);
